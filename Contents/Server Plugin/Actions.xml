@@ -19,4 +19,8 @@
 		<Name>Stop Movement</Name>
 		<CallbackMethod>stop</CallbackMethod>
 	</Action>
+	<Action id="snap" deviceFilter="self">
+		<Name>Take Snapshot</Name>
+		<CallbackMethod>snap</CallbackMethod>
+	</Action>
 </Actions>

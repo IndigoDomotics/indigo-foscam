@@ -4,12 +4,14 @@
 # Copyright (c) 2012, Chad Francis. All rights reserved.
 # http://www.chadfrancis.com
 
-import httplib, urllib2, sys, os
+import httplib, urllib2, smtplib, sys, os
 try:
     import xml.etree.cElementTree as ET
 except ImportError:
     import xml.etree.ElementTree as ET
 
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
 
 class Plugin(indigo.PluginBase):
 
@@ -107,3 +109,62 @@ class Plugin(indigo.PluginBase):
 		path = "/decoder_control.cgi?command="+str(self.directions['stop'])
 
 		self.xmitToCamera(path, dev)
+
+	def snap(self, pluginAction, dev):
+
+		self.debugLog(u"snap called")
+
+		if dev is None:
+			self.debugLog(u"no device defined")
+
+		path = "/snapshot.cgi?"
+
+		resp = self.xmitToCamera(path, dev)
+		snapimg = resp.read()
+
+		snappath = "/tmp/snap.jpg"
+		f = open(snappath, 'w')
+
+		f.write(snapimg)
+		f.close()
+
+		# self.sendToMMS(pluginAction, dev)
+
+	def sendToMMS(self, pluginAction, dev):
+		sender = 'user@domain.com'
+		recipient = '3035551212@mms.att.net'
+
+		# Create the container (outer) email message.
+		msg = MIMEMultipart()
+		msg['Subject'] = 'cam snap'
+		# me == the sender's email address
+		# family = the list of all recipients' email addresses
+		msg['From'] = sender
+		msg['To'] = recipient
+		msg.preamble = 'cam snap test'
+
+		# Open the files in binary mode.  Let the MIMEImage class automatically
+		# guess the specific image type.
+		fp = open('/tmp/snap.jpg', 'rb')
+		img = MIMEImage(fp.read())
+		fp.close()
+		msg.attach(img)
+
+		# Send the email via our own SMTP server.
+		gmail_user = 'user@gmail.com'
+		gmail_pwd = 'passgoeshere'
+		s = smtplib.SMTP("smtp.gmail.com",587)
+		s.ehlo()
+		s.starttls()
+		s.ehlo
+		s.login(gmail_user, gmail_pwd)
+		s.sendmail(sender, recipient, msg.as_string())
+		s.quit()
+
+
+
+
+
+
+
+
