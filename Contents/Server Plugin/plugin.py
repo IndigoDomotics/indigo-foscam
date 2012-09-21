@@ -13,7 +13,7 @@ except ImportError:
 
 class Plugin(indigo.PluginBase):
 
-	def directions = {
+	directions = {
 		'up': 0,
 		'down': 2,
 		'left': 6,
@@ -34,19 +34,33 @@ class Plugin(indigo.PluginBase):
 	def shutdown(self):
 		self.debugLog(u"shutdown called")
 
-	def xmitToCamera(self, path):
+	def xmitToCamera(self, path, dev):
 
 		if path is None:
 			self.debugLog("no path defined")
 
-		ip = dev.pluginProps['ipaddress']
-		user = dev.pluginProps['user']
+		ipaddress = dev.pluginProps['ipaddress']
+		username = dev.pluginProps['username']
 		password = dev.pluginProps['password']
 
+		# create a password manager
+		password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+
+		# Add the username and password.
+		# If we knew the realm, we could use it instead of None.
+		top_level_url = ipaddress
+		password_mgr.add_password(None, top_level_url, username, password)
+
+		handler = urllib2.HTTPBasicAuthHandler(password_mgr)
+
+		# create "opener" (OpenerDirector instance)
+		opener = urllib2.build_opener(handler)
+
 		req = urllib2.Request(
-			url="http://#{user}:#{password}@#{ip}/#{path}"
+			url="http://"+ipaddress+path
 		)
-		return urllib2.urlopen(req)
+		return opener.open(req)
+
 
 
 	# actions go here
@@ -76,9 +90,9 @@ class Plugin(indigo.PluginBase):
 			self.debugLog(u"no direction defined")
 			return
 
-		path = "/decoder_control.cgi?command=#{directions[#direction]}"
+		path = "/decoder_control.cgi?command="+str(self.directions[direction])
 
-		self.xmitToCamera(path)
+		self.xmitToCamera(path, dev)
 		self.stop(pluginAction, dev)
 
 	def stop(self, pluginAction, dev):
@@ -90,6 +104,6 @@ class Plugin(indigo.PluginBase):
 			self.debugLog(u"no device defined")
 			return
 
-		path = "/decoder_control.cgi?command=#{directions['stop']}"
+		path = "/decoder_control.cgi?command="+str(self.directions['stop'])
 
-		self.xmitToCamera(path)
+		self.xmitToCamera(path, dev)
