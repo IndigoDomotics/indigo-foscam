@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<Actions>
+	<Action id="move" deviceFilter="self">
+		<Name>Move Camera</Name>
+		<CallbackMethod>move</CallbackMethod>
+		<ConfigUI>
+			￼<Field type="menu" id="direction" defaultValue="item2">
+				<Label>Direction:</Label>
+				<List>
+					<Option value="up">Up</Option>
+					<Option value="down">Down</Option>
+					<Option value="left">Left</Option>
+					<Option value="right">Right</Option>
+				</List>
+			</Field>
+		</ConfigUI>
+	</Action>
+	<Action id="stop" deviceFilter="self">
+		<Name>Stop Movement</Name>
+		<CallbackMethod>stop</CallbackMethod>
+	</Action>
+</Actions>

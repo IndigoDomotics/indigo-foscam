@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<PluginConfig>
+	<Field id="lblFoo" type="label">
+		<Label>the cake is a lie</Label>
+	</Field>
+</PluginConfig>
