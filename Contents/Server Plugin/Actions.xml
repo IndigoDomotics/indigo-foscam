@@ -20,7 +20,17 @@
 		<CallbackMethod>stop</CallbackMethod>
 	</Action>
 	<Action id="snap" deviceFilter="self">
-		<Name>Take Snapshot</Name>
+		<Name>Email Snapshot</Name>
 		<CallbackMethod>snap</CallbackMethod>
+		<ConfigUI>
+            <Field id="subject" type="textfield">
+                <Label>Subject:</Label>
+                <Description>email subject line</Description>
+            </Field>
+            <Field id="recipient" type="textfield">
+                <Label>Recipient:</Label>
+                <Description>recipient email address</Description>
+            </Field>
+		</ConfigUI>
 	</Action>
 </Actions>

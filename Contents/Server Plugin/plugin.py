@@ -118,7 +118,6 @@ class Plugin(indigo.PluginBase):
 			self.debugLog(u"no device defined")
 
 		path = "/snapshot.cgi?"
-
 		resp = self.xmitToCamera(path, dev)
 		snapimg = resp.read()
 
@@ -128,15 +127,15 @@ class Plugin(indigo.PluginBase):
 		f.write(snapimg)
 		f.close()
 
-		# self.sendToMMS(pluginAction, dev)
+		self.sendViaEmail(pluginAction, dev)
 
-	def sendToMMS(self, pluginAction, dev):
-		sender = 'user@domain.com'
-		recipient = '3035551212@mms.att.net'
+	def sendViaEmail(self, pluginAction, dev):
+		subject = pluginAction.props['subject']
+		recipient = pluginAction.props['recipient']
 
 		# Create the container (outer) email message.
 		msg = MIMEMultipart()
-		msg['Subject'] = 'cam snap'
+		msg['Subject'] = subject
 		# me == the sender's email address
 		# family = the list of all recipients' email addresses
 		msg['From'] = sender
@@ -151,6 +150,7 @@ class Plugin(indigo.PluginBase):
 		msg.attach(img)
 
 		# Send the email via our own SMTP server.
+		sender = 'user@domain.com'
 		gmail_user = 'user@gmail.com'
 		gmail_pwd = 'passgoeshere'
 		s = smtplib.SMTP("smtp.gmail.com",587)
