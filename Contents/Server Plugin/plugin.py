@@ -150,14 +150,17 @@ class Plugin(indigo.PluginBase):
 		msg.attach(img)
 
 		# Send the email via our own SMTP server.
-		sender = 'user@domain.com'
-		gmail_user = 'user@gmail.com'
-		gmail_pwd = 'passgoeshere'
-		s = smtplib.SMTP("smtp.gmail.com",587)
+		sender = 'user@gmail.com'
+		smtp_user = 'user@gmail.com'
+		smtp_pass = 'passgoeshere'
+		smtp_host = 'smtp.gmail.com'
+		smtp_port = 587
+
+		s = smtplib.SMTP(smtp_host,smtp_port)
 		s.ehlo()
 		s.starttls()
 		s.ehlo
-		s.login(gmail_user, gmail_pwd)
+		s.login(smtp_user, smtp_pass)
 		s.sendmail(sender, recipient, msg.as_string())
 		s.quit()
 
