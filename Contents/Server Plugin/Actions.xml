@@ -4,7 +4,7 @@
 		<Name>Move Camera</Name>
 		<CallbackMethod>move</CallbackMethod>
 		<ConfigUI>
-			￼<Field type="menu" id="direction" defaultValue="item2">
+			<Field type="menu" id="direction" defaultValue="item2">
 				<Label>Direction:</Label>
 				<List>
 					<Option value="up">Up</Option>
@@ -18,6 +18,47 @@
 	<Action id="stop" deviceFilter="self">
 		<Name>Stop Movement</Name>
 		<CallbackMethod>stop</CallbackMethod>
+	</Action>
+	<Action id="enable" deviceFilter="self">
+		<Name>Enable Streams</Name>
+		<CallbackMethod>enable</CallbackMethod>
+	</Action>
+	<Action id="disable" deviceFilter="self">
+		<Name>Disable Streams</Name>
+		<CallbackMethod>disable</CallbackMethod>
+	</Action>
+	<Action id="alarmOn" deviceFilter="self">
+		<Name>Activate Motion Alarm</Name>
+		<CallbackMethod>motionAlarmOn</CallbackMethod>
+		<ConfigUI>
+			<Field type="menu" id="sensitivity" defaultValue="10">
+				<Label>Sensitivity:</Label>
+				<List>
+					<Option value="0">10 - Max</Option>
+					<Option value="1">9</Option>
+					<Option value="2">8</Option>
+					<Option value="3">7</Option>
+					<Option value="4">6</Option>
+					<Option value="5">5</Option>
+					<Option value="6">4</Option>
+					<Option value="7">3</Option>
+					<Option value="8">2</Option>
+					<Option value="9">1 - Min</Option>
+				</List>
+			</Field>
+		</ConfigUI>
+	</Action>
+	<Action id="alarmOff" deviceFilter="self">
+		<Name>Deactivate Motion Alarm</Name>
+		<CallbackMethod>motionAlarmOff</CallbackMethod>
+	</Action>
+	<Action id="irOn" deviceFilter="self">
+		<Name>Turn IR On</Name>
+		<CallbackMethod>irOn</CallbackMethod>
+	</Action>
+	<Action id="irOff" deviceFilter="self">
+		<Name>Turn IR Off</Name>
+		<CallbackMethod>irOff</CallbackMethod>
 	</Action>
 	<Action id="snap" deviceFilter="self">
 		<Name>Email Snapshot</Name>
