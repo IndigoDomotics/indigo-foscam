@@ -1,32 +1,32 @@
 <?xml version="1.0"?>
 <Devices>
-    <Device type="custom" id="receiver">
-        <Name>Foscam IP Camera</Name>
-        <ConfigUI>
-            <Field id="ipaddress" type="textfield">
-                <Label>IP Address:</Label>
-                <Description>enter the ip address of your camera</Description>
-            </Field>
-            <Field id="username" type="textfield" default="admin">
-                <Label>Username:</Label>
-                <Description>enter the username for your camera</Description>
-            </Field>
-            <Field id="password" type="textfield" default="admin">
-                <Label>Password:</Label>
-                <Description>enter the password for your camera</Description>
-            </Field>
-        </ConfigUI>
-        <States>
-            <State id="posx">
-                <ValueType>Integer</ValueType>
-                <TriggerLabel>X Position</TriggerLabel>
-                <ControlPageLabel>X Position</ControlPageLabel>
-            </State>
-            <State id="posy">
-                <ValueType>Integer</ValueType>
-                <TriggerLabel>Y Position</TriggerLabel>
-                <ControlPageLabel>Y Position</ControlPageLabel>
-            </State>
-        </States>
-    </Device>
+	<Device type="custom" id="receiver">
+		<Name>Foscam IP Camera</Name>
+		<ConfigUI>
+			<Field id="ipaddress" type="textfield">
+				<Label>IP Address:</Label>
+				<Description>enter the ip address of your camera</Description>
+			</Field>
+			<Field id="username" type="textfield" default="admin">
+				<Label>Username:</Label>
+				<Description>enter the username for your camera</Description>
+			</Field>
+			<Field id="password" type="textfield" default="admin">
+				<Label>Password:</Label>
+				<Description>enter the password for your camera</Description>
+			</Field>
+		</ConfigUI>
+		<States>
+			<State id="posx">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>X Position</TriggerLabel>
+				<ControlPageLabel>X Position</ControlPageLabel>
+			</State>
+			<State id="posy">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>Y Position</TriggerLabel>
+				<ControlPageLabel>Y Position</ControlPageLabel>
+			</State>
+		</States>
+	</Device>
 </Devices>

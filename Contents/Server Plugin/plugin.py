@@ -1,14 +1,10 @@
 #! /usr/bin/env python
-# -*- coding: utf-8 -*-
-####################
-# Copyright (c) 2012, Chad Francis. All rights reserved.
-# http://www.chadfrancis.com
 
 import httplib, urllib2, smtplib, sys, os
 try:
-    import xml.etree.cElementTree as ET
+	import xml.etree.cElementTree as ET
 except ImportError:
-    import xml.etree.ElementTree as ET
+	import xml.etree.ElementTree as ET
 
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
@@ -163,11 +159,3 @@ class Plugin(indigo.PluginBase):
 		s.login(smtp_user, smtp_pass)
 		s.sendmail(sender, recipient, msg.as_string())
 		s.quit()
-
-
-
-
-
-
-
-
