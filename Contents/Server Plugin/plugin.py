@@ -12,12 +12,12 @@ from email.mime.multipart import MIMEMultipart
 class Plugin(indigo.PluginBase):
 
 	directions = {
-		'up': 0,
-		'down': 2,
-		'left': 6,
-		'right': 4,
-		'stop': 3
-	}
+			'up': 0,
+			'down': 2,
+			'left': 6,
+			'right': 4,
+			'stop': 3
+			}
 
 	def __init__(self, pluginId, pluginDisplayName, pluginVersion, pluginPrefs):
 		indigo.PluginBase.__init__(self, pluginId, pluginDisplayName, pluginVersion, pluginPrefs)
@@ -54,9 +54,12 @@ class Plugin(indigo.PluginBase):
 		# create "opener" (OpenerDirector instance)
 		opener = urllib2.build_opener(handler)
 
+		requestUrl = "http://"+ipaddress+path
+
 		req = urllib2.Request(
-			url="http://"+ipaddress+path
-		)
+				url=requestUrl
+				)
+		self.debugLog(u"request URL: "+requestUrl)
 		return opener.open(req)
 
 
@@ -103,6 +106,87 @@ class Plugin(indigo.PluginBase):
 			return
 
 		path = "/decoder_control.cgi?command="+str(self.directions['stop'])
+
+		self.xmitToCamera(path, dev)
+
+	def disable(self, pluginAction, dev):
+
+		# Disable audio and video streams
+		self.debugLog(u"disable called")
+
+		if dev is None:
+			self.debugLog(u"no device defined")
+			return
+
+		path = "/set_forbidden.cgi?schedule_enable=-1&schedule_sun_0=-1&schedule_sun_1=-1&schedule_sun_2=-1&schedule_mon_0=-1&schedule_mon_1=-1&schedule_mon_2=-1&schedule_tue_0=-1&schedule_tue_1=-1&schedule_tue_2=-1&schedule_wed_0=-1&schedule_wed_1=-1&schedule_wed_2=-1&schedule_thu_0=-1&schedule_thu_1=-1&schedule_thu_2=-1&schedule_fri_0=-1&schedule_fri_1=-1&schedule_fri_2=-1&schedule_sat_0=-1&schedule_sat_1=-1&schedule_sat_2=-1"
+
+		self.xmitToCamera(path, dev)
+
+	def enable(self, pluginAction, dev):
+
+		# Enable audio and video streams
+		self.debugLog(u"enable called")
+
+		if dev is None:
+			self.debugLog(u"no device defined")
+			return
+
+		path = "/set_forbidden.cgi?schedule_enable=0&schedule_sun_0=0&schedule_sun_1=0&schedule_sun_2=0&schedule_mon_0=0&schedule_mon_1=0&schedule_mon_2=0&schedule_tue_0=0&schedule_tue_1=0&schedule_tue_2=0&schedule_wed_0=0&schedule_wed_1=0&schedule_wed_2=0&schedule_thu_0=0&schedule_thu_1=0&schedule_thu_2=0&schedule_fri_0=0&schedule_fri_1=0&schedule_fri_2=0&schedule_sat_0=0&schedule_sat_1=0&schedule_sat_2=0"
+
+		self.xmitToCamera(path, dev)
+
+	def motionAlarmOn(self, pluginAction, dev):
+
+		#Enable email alerts when motion sensed
+		self.debugLog(u"motionAlarmOn called")
+
+		if dev is None:
+			self.debugLog(u"no device defined")
+			return
+
+		sensitivity = pluginAction.props['sensitivity']
+		if sensitivity is None:
+			self.debugLog(u"setting default sensitivity of max")
+			sensitivity = 0
+
+		path = "/set_alarm.cgi?motion_armed=1&motion_sensitivity="+sensitivity+"&motion_compensation=1&mail=1"
+
+		self.xmitToCamera(path, dev)
+
+	def motionAlarmOff(self, pluginAction, dev):
+
+		#Enable email alerts when motion sensed
+		self.debugLog(u"motionAlarmOff called")
+
+		if dev is None:
+			self.debugLog(u"no device defined")
+			return
+
+		path = "/set_alarm.cgi?motion_armed=0"
+
+		self.xmitToCamera(path, dev)
+
+	def irOn(self, pluginAction, dev):
+
+		self.debugLog(u"irOn called")
+
+		if dev is None:
+			self.debugLog(u"no device defined")
+			return
+
+		path = "/decoder_control.cgi?command=95"
+
+		self.xmitToCamera(path, dev)
+
+	def irOff(self, pluginAction, dev):
+
+		self.debugLog(u"irOn called")
+
+		if dev is None:
+			self.debugLog(u"no device defined")
+			return
+
+		path = "/decoder_control.cgi?command=94"
 
 		self.xmitToCamera(path, dev)
 
