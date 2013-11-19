@@ -3,11 +3,16 @@ indigo-foscam
 
 Indigo plugin to control Foscam webcams.
 
-Note: the current version does not support the 9000-series HD cameras at this time. (models FI9805E, FI9805W, FI9821W) 
+Note: the current version does not support the 9000-series HD cameras at this time. (models FI9805E, FI9805W, FI9821W)
 
-Currently Supported Actions:
+Supported Actions:
 -Move Camera (up, down, left, right)
 -Stop Movement
--Email Snapshot (in development)
+-Enable/Disable Streams
+-Activate/Deactivate Motion Alarm
+-Enable/Disable IR leds
+-Email Snapshot
 
-additional features coming soon!
+States Exposed:
+-X Position
+-Y Position
