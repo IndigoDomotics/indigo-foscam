@@ -1,6 +1,21 @@
 <?xml version="1.0"?>
 <PluginConfig>
-	<Field id="lblFoo" type="label">
-		<Label>the cake is a lie</Label>
+	<Field id="label0" type="label">
+		<Label>Smtp Server Configuration</Label>
+	</Field>
+	<Field id="sender" type="textfield" defaultValue="user@gmail.com">
+		<Label>Sender Email:</Label>
+	</Field>
+	<Field id="smtpuser" type="textfield" defaultValue="user@gmail.com">
+		<Label>Username:</Label>
+	</Field>
+	<Field id="smtppass" type="textfield" defaultValue="password">
+		<Label>Password:</Label>
+	</Field>
+	<Field id="smtphost" type="textfield" defaultValue="smtp.gmail.com">
+		<Label>Host:</Label>
+	</Field>
+	<Field id="smtpport" type="textfield" defaultValue="587">
+		<Label>Port:</Label>
 	</Field>
 </PluginConfig>

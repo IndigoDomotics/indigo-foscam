@@ -37,7 +37,7 @@ class Plugin(indigo.PluginBase):
 		if path is None:
 			self.debugLog("no path defined")
 
-		ipaddress = dev.pluginProps['ipaddress']
+		hostname = dev.pluginProps['ipaddress']
 		username = dev.pluginProps['username']
 		password = dev.pluginProps['password']
 
@@ -46,19 +46,16 @@ class Plugin(indigo.PluginBase):
 
 		# Add the username and password.
 		# If we knew the realm, we could use it instead of None.
-		top_level_url = ipaddress
-		password_mgr.add_password(None, top_level_url, username, password)
+		password_mgr.add_password(None, hostname, username, password)
 
 		handler = urllib2.HTTPBasicAuthHandler(password_mgr)
 
 		# create "opener" (OpenerDirector instance)
 		opener = urllib2.build_opener(handler)
 
-		requestUrl = "http://"+ipaddress+path
+		requestUrl = "http://"+hostname+path
 
-		req = urllib2.Request(
-				url=requestUrl
-				)
+		req = urllib2.Request(url=requestUrl)
 		self.debugLog(u"request URL: "+requestUrl)
 		return opener.open(req)
 
@@ -197,10 +194,14 @@ class Plugin(indigo.PluginBase):
 		if dev is None:
 			self.debugLog(u"no device defined")
 
-		path = "/snapshot.cgi?"
+		username = dev.pluginProps['username']
+		password = dev.pluginProps['password']
+
+		path = "/snapshot.cgi?user="+username+"&pwd="+password
 		resp = self.xmitToCamera(path, dev)
 		snapimg = resp.read()
 
+		# todo: serialize filename, pass to sendViaEmail
 		snappath = "/tmp/snap.jpg"
 		f = open(snappath, 'w')
 
@@ -210,16 +211,12 @@ class Plugin(indigo.PluginBase):
 		self.sendViaEmail(pluginAction, dev)
 
 	def sendViaEmail(self, pluginAction, dev):
-		subject = pluginAction.props['subject']
-		recipient = pluginAction.props['recipient']
-
+		
 		# Create the container (outer) email message.
 		msg = MIMEMultipart()
-		msg['Subject'] = subject
-		# me == the sender's email address
-		# family = the list of all recipients' email addresses
-		msg['From'] = sender
-		msg['To'] = recipient
+		msg['Subject'] = pluginAction.props['subject']
+		msg['From'] = self.pluginPrefs['sender']
+		msg['To'] = pluginAction.props['recipient']
 		msg.preamble = 'cam snap test'
 
 		# Open the files in binary mode.  Let the MIMEImage class automatically
@@ -229,17 +226,10 @@ class Plugin(indigo.PluginBase):
 		fp.close()
 		msg.attach(img)
 
-		# Send the email via our own SMTP server.
-		sender = 'user@gmail.com'
-		smtp_user = 'user@gmail.com'
-		smtp_pass = 'passgoeshere'
-		smtp_host = 'smtp.gmail.com'
-		smtp_port = 587
-
-		s = smtplib.SMTP(smtp_host,smtp_port)
+		s = smtplib.SMTP(self.pluginPrefs['smtphost'],int(self.pluginPrefs['smtpport']))
 		s.ehlo()
 		s.starttls()
 		s.ehlo
-		s.login(smtp_user, smtp_pass)
-		s.sendmail(sender, recipient, msg.as_string())
+		s.login(self.pluginPrefs['smtpuser'], self.pluginPrefs['smtppass'])
+		s.sendmail(self.pluginPrefs['sender'], pluginAction.props['recipient'], msg.as_string())
 		s.quit()
