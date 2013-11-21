@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Devices>
-	<Device type="custom" id="receiver">
+	<Device type="custom" id="camera">
 		<Name>Foscam IP Camera</Name>
 		<ConfigUI>
 			<Field id="ipaddress" type="textfield">
