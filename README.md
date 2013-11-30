@@ -11,6 +11,7 @@ Indigo plugin to control Foscam webcams.
 ### Actions
 
 - Move Camera (up, down, left, right)
+- Go to or set preset position
 - Stop Movement
 - Enable/Disable Streams
 - Activate/Deactivate Motion Alarm
