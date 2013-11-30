@@ -230,7 +230,7 @@ class Plugin(indigo.PluginBase):
 		self.debugLog(u"snap called")
 		if dev is None: 
 			return self.debugLog(u"no device defined")
-		resp = self.xmitToCamera('/snapshot.cgi', {}, dev)
+		resp = self.xmitToCamera('snapshot.cgi', {}, dev)
 		snapimg = resp.read()
 
 		# todo: serialize filename, pass to sendViaEmail
