@@ -32,48 +32,20 @@ class Plugin(indigo.PluginBase):
 	def shutdown(self):
 		self.debugLog(u"shutdown called")
 
-	def xmitToCamera(self, path, dev):
+	def xmitToCamera(self, cgiPath, params, dev):
 
 		if path is None:
 			self.debugLog("no path defined")
 
-		hostname = dev.pluginProps['ipaddress']
-		username = dev.pluginProps['username']
-		password = dev.pluginProps['password']
+        url = 'http://%s/%s?user=%s&pwd=%s' % (dev.pluginProps['ipaddress'], cgiPath, dev.pluginProps['username'], dev.pluginProps['password'])
+        for param in params:
+            url = url + '&%s=%s' % (param, params[param])
 
-		# create a password manager
-		password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+        self.debugLog(u"url xmitted: ")
 
-		# Add the username and password.
-		# If we knew the realm, we could use it instead of None.
-		password_mgr.add_password(None, hostname, username, password)
-
-		handler = urllib2.HTTPBasicAuthHandler(password_mgr)
-
-		# create "opener" (OpenerDirector instance)
-		opener = urllib2.build_opener(handler)
-
-		requestUrl = "http://"+hostname+path
-
-		req = urllib2.Request(url=requestUrl)
-		self.debugLog(u"request URL: "+requestUrl)
-		return opener.open(req)
-
-
-
-	# actions go here
-	def getStatus(self, pluginAction, dev):
-		# get status from receiver, update locals
-		self.debugLog(u"getStatus called")
-
-		if dev is None:
-			self.debugLog(u"no device defined")
-			return
-
-		#TODO: get device status, update states
+        return urllib2.urlopen(url)
 
 	def move(self, pluginAction, dev):
-
 
 		# move camera
 		self.debugLog(u"move called")
@@ -88,9 +60,7 @@ class Plugin(indigo.PluginBase):
 			self.debugLog(u"no direction defined")
 			return
 
-		path = "/decoder_control.cgi?command="+str(self.directions[direction])
-
-		self.xmitToCamera(path, dev)
+		self.xmitToCamera("/decoder_control.cgi", {'command': str(self.directions[direction])}, dev)
 		self.stop(pluginAction, dev)
 
 	def stop(self, pluginAction, dev):
@@ -102,9 +72,7 @@ class Plugin(indigo.PluginBase):
 			self.debugLog(u"no device defined")
 			return
 
-		path = "/decoder_control.cgi?command="+str(self.directions['stop'])
-
-		self.xmitToCamera(path, dev)
+		self.xmitToCamera("/decoder_control.cgi", {'command': str(self.directions['stop'])}, dev)
 
 	def disable(self, pluginAction, dev):
 
@@ -115,9 +83,31 @@ class Plugin(indigo.PluginBase):
 			self.debugLog(u"no device defined")
 			return
 
-		path = "/set_forbidden.cgi?schedule_enable=-1&schedule_sun_0=-1&schedule_sun_1=-1&schedule_sun_2=-1&schedule_mon_0=-1&schedule_mon_1=-1&schedule_mon_2=-1&schedule_tue_0=-1&schedule_tue_1=-1&schedule_tue_2=-1&schedule_wed_0=-1&schedule_wed_1=-1&schedule_wed_2=-1&schedule_thu_0=-1&schedule_thu_1=-1&schedule_thu_2=-1&schedule_fri_0=-1&schedule_fri_1=-1&schedule_fri_2=-1&schedule_sat_0=-1&schedule_sat_1=-1&schedule_sat_2=-1"
-
-		self.xmitToCamera(path, dev)
+		params = {
+			'schedule_enable':-1,
+			'schedule_sun_0':-1,
+			'schedule_sun_1':-1,
+			'schedule_sun_2':-1,
+			'schedule_mon_0':-1,
+			'schedule_mon_1':-1,
+			'schedule_mon_2':-1,
+			'schedule_tue_0':-1,
+			'schedule_tue_1':-1,
+			'schedule_tue_2':-1,
+			'schedule_wed_0':-1,
+			'schedule_wed_1':-1,
+			'schedule_wed_2':-1,
+			'schedule_thu_0':-1,
+			'schedule_thu_1':-1,
+			'schedule_thu_2':-1,
+			'schedule_fri_0':-1,
+			'schedule_fri_1':-1,
+			'schedule_fri_2':-1,
+			'schedule_sat_0':-1,
+			'schedule_sat_1':-1,
+			'schedule_sat_2':-1
+		}
+		self.xmitToCamera("/set_forbidden.cgi", params, dev)
 
 	def enable(self, pluginAction, dev):
 
@@ -128,9 +118,32 @@ class Plugin(indigo.PluginBase):
 			self.debugLog(u"no device defined")
 			return
 
-		path = "/set_forbidden.cgi?schedule_enable=0&schedule_sun_0=0&schedule_sun_1=0&schedule_sun_2=0&schedule_mon_0=0&schedule_mon_1=0&schedule_mon_2=0&schedule_tue_0=0&schedule_tue_1=0&schedule_tue_2=0&schedule_wed_0=0&schedule_wed_1=0&schedule_wed_2=0&schedule_thu_0=0&schedule_thu_1=0&schedule_thu_2=0&schedule_fri_0=0&schedule_fri_1=0&schedule_fri_2=0&schedule_sat_0=0&schedule_sat_1=0&schedule_sat_2=0"
+		params = {
+			'schedule_enable':0,
+			'schedule_sun_0':0,
+			'schedule_sun_1':0,
+			'schedule_sun_2':0,
+			'schedule_mon_0':0,
+			'schedule_mon_1':0,
+			'schedule_mon_2':0,
+			'schedule_tue_0':0,
+			'schedule_tue_1':0,
+			'schedule_tue_2':0,
+			'schedule_wed_0':0,
+			'schedule_wed_1':0,
+			'schedule_wed_2':0,
+			'schedule_thu_0':0,
+			'schedule_thu_1':0,
+			'schedule_thu_2':0,
+			'schedule_fri_0':0,
+			'schedule_fri_1':0,
+			'schedule_fri_2':0,
+			'schedule_sat_0':0,
+			'schedule_sat_1':0,
+			'schedule_sat_2':0
+		}
 
-		self.xmitToCamera(path, dev)
+		self.xmitToCamera("/set_forbidden.cgi", params, dev)
 
 	def motionAlarmOn(self, pluginAction, dev):
 
@@ -146,46 +159,47 @@ class Plugin(indigo.PluginBase):
 			self.debugLog(u"setting default sensitivity of max")
 			sensitivity = 0
 
-		path = "/set_alarm.cgi?motion_armed=1&motion_sensitivity="+sensitivity+"&motion_compensation=1&mail=1"
+		params = {
+			'motion_armed':1,
+			'motion_sensitivity': sensitivity,
+			'motion_compensation':1,
+			'mail':1
+		}
 
-		self.xmitToCamera(path, dev)
+		self.xmitToCamera("/set_alarm.cgi", params, dev)
 
 	def motionAlarmOff(self, pluginAction, dev):
 
-		#Enable email alerts when motion sensed
+		#Disable email alerts when motion sensed
 		self.debugLog(u"motionAlarmOff called")
 
-		if dev is None:
-			self.debugLog(u"no device defined")
-			return
+		params = {
+			'motion_armed':0
+		}
 
-		path = "/set_alarm.cgi?motion_armed=0"
-
-		self.xmitToCamera(path, dev)
+		self.xmitToCamera("/set_alarm.cgi", params, dev)
 
 	def irOn(self, pluginAction, dev):
 
+		#Enable Infrared LEDs
 		self.debugLog(u"irOn called")
 
 		if dev is None:
 			self.debugLog(u"no device defined")
 			return
 
-		path = "/decoder_control.cgi?command=95"
-
-		self.xmitToCamera(path, dev)
+		self.xmitToCamera("/decoder_control.cgi", {'command':95}, dev)
 
 	def irOff(self, pluginAction, dev):
 
-		self.debugLog(u"irOn called")
+		#Disable Infrared LEDs
+		self.debugLog(u"irOff called")
 
 		if dev is None:
 			self.debugLog(u"no device defined")
 			return
 
-		path = "/decoder_control.cgi?command=94"
-
-		self.xmitToCamera(path, dev)
+		self.xmitToCamera("/decoder_control.cgi", {'command':94}, dev)
 
 	def snap(self, pluginAction, dev):
 
