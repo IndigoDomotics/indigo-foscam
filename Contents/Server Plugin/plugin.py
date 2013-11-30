@@ -34,54 +34,45 @@ class Plugin(indigo.PluginBase):
 
 	def xmitToCamera(self, cgiPath, params, dev):
 
-		if path is None:
-			self.debugLog("no path defined")
+		if cgiPath is None: 
+			return self.debugLog("no path defined")
 
-        url = 'http://%s/%s?user=%s&pwd=%s' % (dev.pluginProps['ipaddress'], cgiPath, dev.pluginProps['username'], dev.pluginProps['password'])
-        for param in params:
-            url = url + '&%s=%s' % (param, params[param])
+		url = 'http://%s/%s?user=%s&pwd=%s' % (dev.pluginProps['ipaddress'], cgiPath, dev.pluginProps['username'], dev.pluginProps['password'])
+		for param in params:
+			url = url + '&%s=%s' % (param, params[param])
 
-        self.debugLog(u"url xmitted: ")
+		self.debugLog(u"url xmitted: "+url)
 
-        return urllib2.urlopen(url)
+		return urllib2.urlopen(url)
 
+	# move camera
 	def move(self, pluginAction, dev):
 
-		# move camera
 		self.debugLog(u"move called")
-
-		if dev is None:
-			self.debugLog(u"no device defined")
-			return
+		if dev is None: 
+			return self.debugLog(u"no device defined")
 
 		direction = pluginAction.props['direction']
+		if direction is None: 
+			return self.debugLog(u"no direction defined")
 
-		if direction is None:
-			self.debugLog(u"no direction defined")
-			return
-
-		self.xmitToCamera("/decoder_control.cgi", {'command': str(self.directions[direction])}, dev)
+		self.xmitToCamera("decoder_control.cgi", {'command': str(self.directions[direction])}, dev)
 		self.stop(pluginAction, dev)
 
+	# stop camera movement
 	def stop(self, pluginAction, dev):
 
-		# stop camera movement
 		self.debugLog(u"stop called")
+		if dev is None: 
+			return self.debugLog(u"no device defined")
+		self.xmitToCamera("decoder_control.cgi", {'command': str(self.directions['stop'])}, dev)
 
-		if dev is None:
-			self.debugLog(u"no device defined")
-			return
-
-		self.xmitToCamera("/decoder_control.cgi", {'command': str(self.directions['stop'])}, dev)
-
+	# Disable audio and video streams
 	def disable(self, pluginAction, dev):
 
-		# Disable audio and video streams
 		self.debugLog(u"disable called")
-
-		if dev is None:
-			self.debugLog(u"no device defined")
-			return
+		if dev is None: 
+			return self.debugLog(u"no device defined")
 
 		params = {
 			'schedule_enable':-1,
@@ -107,16 +98,14 @@ class Plugin(indigo.PluginBase):
 			'schedule_sat_1':-1,
 			'schedule_sat_2':-1
 		}
-		self.xmitToCamera("/set_forbidden.cgi", params, dev)
+		self.xmitToCamera("set_forbidden.cgi", params, dev)
 
+	# Enable audio and video streams
 	def enable(self, pluginAction, dev):
-
-		# Enable audio and video streams
+	
 		self.debugLog(u"enable called")
-
-		if dev is None:
-			self.debugLog(u"no device defined")
-			return
+		if dev is None: 
+			return self.debugLog(u"no device defined")
 
 		params = {
 			'schedule_enable':0,
@@ -143,16 +132,14 @@ class Plugin(indigo.PluginBase):
 			'schedule_sat_2':0
 		}
 
-		self.xmitToCamera("/set_forbidden.cgi", params, dev)
+		self.xmitToCamera("set_forbidden.cgi", params, dev)
 
+	#Enable email alerts when motion sensed
 	def motionAlarmOn(self, pluginAction, dev):
-
-		#Enable email alerts when motion sensed
+	
 		self.debugLog(u"motionAlarmOn called")
-
-		if dev is None:
-			self.debugLog(u"no device defined")
-			return
+		if dev is None: 
+			return self.debugLog(u"no device defined")
 
 		sensitivity = pluginAction.props['sensitivity']
 		if sensitivity is None:
@@ -166,59 +153,43 @@ class Plugin(indigo.PluginBase):
 			'mail':1
 		}
 
-		self.xmitToCamera("/set_alarm.cgi", params, dev)
+		self.xmitToCamera("set_alarm.cgi", params, dev)
 
+	#Disable email alerts when motion sensed
 	def motionAlarmOff(self, pluginAction, dev):
-
-		#Disable email alerts when motion sensed
+	
 		self.debugLog(u"motionAlarmOff called")
+		if dev is None: 
+			return self.debugLog(u"no device defined")
+		self.xmitToCamera("set_alarm.cgi", {'motion_armed':0}, dev)
 
-		params = {
-			'motion_armed':0
-		}
-
-		self.xmitToCamera("/set_alarm.cgi", params, dev)
-
+	#Enable Infrared LEDs
 	def irOn(self, pluginAction, dev):
-
-		#Enable Infrared LEDs
+	
 		self.debugLog(u"irOn called")
+		if dev is None: 
+			return self.debugLog(u"no device defined")
+		self.xmitToCamera("decoder_control.cgi", {'command':95}, dev)
 
-		if dev is None:
-			self.debugLog(u"no device defined")
-			return
-
-		self.xmitToCamera("/decoder_control.cgi", {'command':95}, dev)
-
+	#Disable Infrared LEDs
 	def irOff(self, pluginAction, dev):
-
-		#Disable Infrared LEDs
+	
 		self.debugLog(u"irOff called")
-
-		if dev is None:
-			self.debugLog(u"no device defined")
-			return
-
-		self.xmitToCamera("/decoder_control.cgi", {'command':94}, dev)
+		if dev is None: 
+			return self.debugLog(u"no device defined")
+		self.xmitToCamera("decoder_control.cgi", {'command':94}, dev)
 
 	def snap(self, pluginAction, dev):
-
+	
 		self.debugLog(u"snap called")
-
-		if dev is None:
-			self.debugLog(u"no device defined")
-
-		username = dev.pluginProps['username']
-		password = dev.pluginProps['password']
-
-		path = "/snapshot.cgi?user="+username+"&pwd="+password
-		resp = self.xmitToCamera(path, dev)
+		if dev is None: 
+			return self.debugLog(u"no device defined")
+		resp = self.xmitToCamera('/snapshot.cgi', {}, dev)
 		snapimg = resp.read()
 
 		# todo: serialize filename, pass to sendViaEmail
 		snappath = "/tmp/snap.jpg"
 		f = open(snappath, 'w')
-
 		f.write(snapimg)
 		f.close()
 
