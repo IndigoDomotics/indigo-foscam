@@ -11,13 +11,34 @@ from email.mime.multipart import MIMEMultipart
 
 class Plugin(indigo.PluginBase):
 
+	#maps directions to command codes
 	directions = {
-			'up': 0,
-			'down': 2,
-			'left': 6,
-			'right': 4,
-			'stop': 3
-			}
+		'up': 0,
+		'down': 2,
+		'left': 6,
+		'right': 4,
+		'stop': 3
+	}
+
+	#maps preset id to command codes for set
+	presets = {
+		'1': { 'set': 30, 'go': 31},
+		'2': { 'set': 32, 'go': 33},
+		'3': { 'set': 34, 'go': 35},
+		'4': { 'set': 36, 'go': 37},
+		'5': { 'set': 38, 'go': 39},
+		'6': { 'set': 40, 'go': 41},
+		'7': { 'set': 42, 'go': 43},
+		'8': { 'set': 44, 'go': 45},
+		'9': { 'set': 46, 'go': 47},
+		'10': { 'set': 48, 'go': 49},
+		'11': { 'set': 50, 'go': 51},
+		'12': { 'set': 52, 'go': 53},
+		'13': { 'set': 54, 'go': 55},
+		'14': { 'set': 56, 'go': 57},
+		'15': { 'set': 58, 'go': 59},
+		'16': { 'set': 60, 'go': 61}
+    }
 
 	def __init__(self, pluginId, pluginDisplayName, pluginVersion, pluginPrefs):
 		indigo.PluginBase.__init__(self, pluginId, pluginDisplayName, pluginVersion, pluginPrefs)
@@ -57,7 +78,6 @@ class Plugin(indigo.PluginBase):
 			return self.debugLog(u"no direction defined")
 
 		self.xmitToCamera("decoder_control.cgi", {'command': str(self.directions[direction])}, dev)
-		self.stop(pluginAction, dev)
 
 	# stop camera movement
 	def stop(self, pluginAction, dev):
@@ -66,6 +86,32 @@ class Plugin(indigo.PluginBase):
 		if dev is None: 
 			return self.debugLog(u"no device defined")
 		self.xmitToCamera("decoder_control.cgi", {'command': str(self.directions['stop'])}, dev)
+
+	# move camera to preset position
+	def goToPreset(self, pluginAction, dev):
+
+		self.debugLog(u"goToPreset called")
+		if dev is None: 
+			return self.debugLog(u"no device defined")
+
+		preset = pluginAction.props['preset']
+		if preset is None: 
+			return self.debugLog(u"no preset defined")
+
+		self.xmitToCamera("decoder_control.cgi", {'command': str(self.presets[preset]['go'])}, dev)
+
+	# save current camera position to preset id
+	def setPreset(self, pluginAction, dev):
+
+		self.debugLog(u"setPreset called")
+		if dev is None: 
+			return self.debugLog(u"no device defined")
+
+		preset = pluginAction.props['preset']
+		if preset is None: 
+			return self.debugLog(u"no preset defined")
+
+		self.xmitToCamera("decoder_control.cgi", {'command': str(self.presets[preset]['set'])}, dev)
 
 	# Disable audio and video streams
 	def disable(self, pluginAction, dev):

@@ -15,6 +15,26 @@
 			</Field>
 		</ConfigUI>
 	</Action>
+	<Action id="goToPreset" deviceFilter="self">
+		<Name>Go to preset position</Name>
+		<CallbackMethod>goToPreset</CallbackMethod>
+		<ConfigUI>
+			<Field id="preset" type="textfield">
+				<Label>Preset Id:</Label>
+				<Description>1-16</Description>
+			</Field>
+		</ConfigUI>
+	</Action>
+	<Action id="setPreset" deviceFilter="self">
+		<Name>Set current location as preset</Name>
+		<CallbackMethod>setPreset</CallbackMethod>
+		<ConfigUI>
+			<Field id="preset" type="textfield">
+				<Label>Preset Id:</Label>
+				<Description>1-16</Description>
+			</Field>
+		</ConfigUI>
+	</Action>
 	<Action id="stop" deviceFilter="self">
 		<Name>Stop Movement</Name>
 		<CallbackMethod>stop</CallbackMethod>
