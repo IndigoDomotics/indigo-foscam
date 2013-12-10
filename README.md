@@ -8,7 +8,7 @@ Indigo plugin to control Foscam webcams.
 1. Download latest release [here](https://github.com/discgolfer1138/indigo-foscam/releases)
 2. Follow [standard plugin installation process](http://bit.ly/1e1Vc7b)
 
-### Actions
+### Actions Supported
 
 - Move Camera (up, down, left, right)
 - Go to or set preset position
