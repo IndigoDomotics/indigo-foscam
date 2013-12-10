@@ -6,7 +6,7 @@ Indigo plugin to control Foscam webcams.
 ### Installation Instructions
 
 1. Download latest release [here](https://github.com/discgolfer1138/indigo-foscam/releases)
-2. Follow [standard plugin installation process](http://www.perceptiveautomation.com/wiki/doku.php?id=indigo_6_documentation:getting_started#installing_plugins_and_configuring_plugin_settings_pro_only_feature)
+2. Follow [standard plugin installation process](http://bit.ly/1e1Vc7b)
 
 ### Actions
 
@@ -16,7 +16,7 @@ Indigo plugin to control Foscam webcams.
 - Enable/Disable Streams
 - Activate/Deactivate Motion Alarm
 - Enable/Disable IR leds
-- Email Snapshot
+- Email Snapshot (SMTP server is set in plugin config)
 
 ### States Exposed
 
