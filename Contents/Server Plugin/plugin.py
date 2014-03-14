@@ -253,7 +253,7 @@ class Plugin(indigo.PluginBase):
 		# Open the files in binary mode.  Let the MIMEImage class automatically
 		# guess the specific image type.
 		fp = open('/tmp/snap.jpg', 'rb')
-		img = MIMEImage(fp.read())
+		img = MIMEImage(fp.read(), "jpeg")
 		fp.close()
 		msg.attach(img)
 
