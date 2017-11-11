@@ -3,23 +3,30 @@
 <plist version="1.0">
 <dict>
 	<key>PluginVersion</key>
-	<string>1.0.3</string>
+	<string>1.1.0</string>
 	<key>ServerApiVersion</key>
-	<string>1.0</string>
+	<string>2.0</string>
 	<key>IwsApiVersion</key>
 	<string>1.0.0</string>
 	<key>CFBundleDisplayName</key>
 	<string>Foscam Controller</string>
 	<key>CFBundleIdentifier</key>
-	<string>io.thechad.indigoplugin.foscam</string>
+	<string>com.indigodomo.opensource.indigo-foscam</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0</string>
+	<string>1.0.1</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>https://github.com/discgolfer1138/indigo-foscam</string>
+			<string>https://github.com/IndigoDomotics/indigo-foscam</string>
 		</dict>
 	</array>
+	<key>GithubInfo</key>
+	<dict>
+		<key>GithubRepo</key>
+		<string>indigo-foscam</string>
+		<key>GithubUser</key>
+		<string>IndigoDomotics</string>
+	</dict>
 </dict>
 </plist>
